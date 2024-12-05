@@ -11,6 +11,7 @@
       <li>
         {{ medicamento.nombre }} - ${{ medicamento.precio|floatformat:2 }}
         <a href="{% url 'detalle_medicamento' medicamento.id %}">Detalles</a>
+        <a href="{% url 'editar_medicamento' medicamento.id %}">Editar</a>
       </li>
       {% endfor %}
     </ul>

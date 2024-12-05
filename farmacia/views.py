@@ -19,3 +19,14 @@ def crear_medicamento(request):
     else:
         form = MedicamentoForm()
     return render(request, 'farmacia/crear_medicamento.html', {'form': form})
+
+def editar_medicamento(request, id):
+    medicamento = get_object_or_404(Medicamento, id=id)
+    if request.method == 'POST':
+        form = MedicamentoForm(request.POST, instance=medicamento)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_medicamentos')
+    else:
+        form = MedicamentoForm(instance=medicamento)
+    return render(request, 'farmacia/editar_medicamento.html', {'form': form})
