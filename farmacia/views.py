@@ -30,3 +30,9 @@ def editar_medicamento(request, id):
     else:
         form = MedicamentoForm(instance=medicamento)
     return render(request, 'farmacia/editar_medicamento.html', {'form': form})
+
+def eliminar_medicamento(request, id):
+    medicamento = get_object_or_404(Medicamento, id=id)
+    medicamento.delete()
+    return redirect('lista_medicamentos')
+
