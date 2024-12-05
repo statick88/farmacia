@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Farmacia{% endblock %}</title>
+    {% load static %}
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <header class="bg-blue-500 text-white p-4">
+      <h1 class="text-lg font-bold">Farmacia</h1>
+    </header>
+    <main class="p-6">{% block content %}{% endblock %}</main>
+    <footer class="bg-gray-700 text-white text-center p-4">
+      <p>&copy; 2024 Farmacia</p>
+    </footer>
+  </body>
+</html>

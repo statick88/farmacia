@@ -10,15 +10,22 @@ def detalle_medicamento(request, id):
     medicamento = get_object_or_404(Medicamento, id=id)
     return render(request, 'farmacia/detalle_medicamento.html', {'medicamento': medicamento})
 
+from django.contrib import messages
+
 def crear_medicamento(request):
     if request.method == 'POST':
         form = MedicamentoForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "Medicamento guardado correctamente.")
             return redirect('lista_medicamentos')
+        else:
+            messages.error(request, "Hubo un error al guardar el medicamento.")
     else:
         form = MedicamentoForm()
-    return render(request, 'farmacia/crear_medicamento.html', {'form': form})
+
+    return render(request, 'crear_medicamento.html', {'form': form})
+
 
 def editar_medicamento(request, id):
     medicamento = get_object_or_404(Medicamento, id=id)
@@ -33,6 +40,8 @@ def editar_medicamento(request, id):
 
 def eliminar_medicamento(request, id):
     medicamento = get_object_or_404(Medicamento, id=id)
-    medicamento.delete()
-    return redirect('lista_medicamentos')
+    if request.method == 'POST':
+        medicamento.delete()
+        return redirect('lista_medicamentos')
+    return render(request, 'farmacia/eliminar_medicamento.html', {'medicamento': medicamento})
 
