@@ -1,16 +1,45 @@
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Medicamento
 from .forms import MedicamentoForm
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Medicamento
+from .serializers import MedicamentoSerializer
+
+
+class MedicamentoList(APIView):
+    def get(self, request):
+        medicamentos = Medicamento.objects.all()
+        serializer = MedicamentoSerializer(medicamentos, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = MedicamentoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MedicamentoDetail(APIView):
+    def get(self, request, id):
+        medicamento = Medicamento.objects.get(pk=id)
+        serializer = MedicamentoSerializer(medicamento)
+        return Response(serializer.data)
+
 
 def lista_medicamentos(request):
     medicamentos = Medicamento.objects.all()
     return render(request, 'farmacia/lista_medicamentos.html', {'medicamentos': medicamentos})
 
+
 def detalle_medicamento(request, id):
     medicamento = get_object_or_404(Medicamento, id=id)
     return render(request, 'farmacia/detalle_medicamento.html', {'medicamento': medicamento})
 
-from django.contrib import messages
 
 def crear_medicamento(request):
     if request.method == 'POST':
@@ -38,10 +67,10 @@ def editar_medicamento(request, id):
         form = MedicamentoForm(instance=medicamento)
     return render(request, 'farmacia/editar_medicamento.html', {'form': form})
 
+
 def eliminar_medicamento(request, id):
     medicamento = get_object_or_404(Medicamento, id=id)
     if request.method == 'POST':
         medicamento.delete()
         return redirect('lista_medicamentos')
     return render(request, 'farmacia/eliminar_medicamento.html', {'medicamento': medicamento})
-
