@@ -1,6 +1,8 @@
-from django.urls import path
-from . import views
-from .views import MedicamentoList, MedicamentoDetail
+from django.urls import path, include
+# from . import views
+# from .views import MedicamentoList, MedicamentoDetail
+from rest_framework.routers import DefaultRouter
+from .views import MedicamentoView
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -16,20 +18,23 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+router = DefaultRouter()
+router.register(r'medicamentos', MedicamentoView)
 
 urlpatterns = [
-    path('', views.lista_medicamentos, name='lista_medicamentos'),
-    path('medicamentos/', views.lista_medicamentos, name='lista_medicamentos'),
-    path('medicamentos/<int:id>/', views.detalle_medicamento,
-         name='detalle_medicamento'),
-    path('medicamentos/nuevo/', views.crear_medicamento, name='crear_medicamento'),
-    path('medicamentos/editar/<int:id>/',
-         views.editar_medicamento, name='editar_medicamento'),
-    path('medicamentos/eliminar/<int:id>/',
-         views.eliminar_medicamento, name='eliminar_medicamento'),
-    path('api/medicamentos/', MedicamentoList.as_view(), name='medicamento-list'),
-    path('api/medicamentos/<int:id>/',
-         MedicamentoDetail.as_view(), name='medicamento-detail'),
+    # path('', views.lista_medicamentos, name='lista_medicamentos'),
+    # path('medicamentos/', views.lista_medicamentos, name='lista_medicamentos'),
+    # path('medicamentos/<int:id>/', views.detalle_medicamento,
+    #      name='detalle_medicamento'),
+    # path('medicamentos/nuevo/', views.crear_medicamento, name='crear_medicamento'),
+    # path('medicamentos/editar/<int:id>/',
+    #      views.editar_medicamento, name='editar_medicamento'),
+    # path('medicamentos/eliminar/<int:id>/',
+    #      views.eliminar_medicamento, name='eliminar_medicamento'),
+    # path('api/medicamentos/', MedicamentoList.as_view(), name='medicamento-list'),
+    # path('api/medicamentos/<int:id>/',
+    #      MedicamentoDetail.as_view(), name='medicamento-detail'),
+    path('api/', include(router.urls)),
     path('swagger/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc',
